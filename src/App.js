@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { Canvas, useFrame } from "react-three-fiber";
 
-import { softShadows, OrbitControls } from "drei";
+import { softShadows } from "drei";
 
 import "./App.scss";
 
 import { useSpring, a } from "react-spring/three";
+
+softShadows();
 
 const Controllable = ({
   moveForward,
@@ -17,21 +19,27 @@ const Controllable = ({
   color,
 }) => {
   const mesh = useRef(null); // the reference for the mesh
-  useFrame(() => {
+  useFrame(({ clock, camera }) => {
     if (moveForward) {
       mesh.current.position.z += 0.05;
+      console.log(Math.round(mesh.current.position.z));
+      camera.position.z += 0.049;
     }
 
     if (moveBackwards) {
+      console.log(Math.round(mesh.current.position.z));
       mesh.current.position.z -= 0.05;
+      camera.position.z -= 0.049;
     }
 
     if (moveLeft) {
+      camera.position.x -= 0.049;
       mesh.current.position.x -= 0.05;
     }
 
     if (moveRight) {
       mesh.current.position.x += 0.05;
+      camera.position.x += 0.049;
     }
   }); // to rotate the shape defined in our mesh
 
